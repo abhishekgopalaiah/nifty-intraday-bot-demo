@@ -7,10 +7,6 @@ def load_csv_data():
         '5m': pd.read_csv('sample_data/nifty_spot_5m.csv', parse_dates=['timestamp']),
         '15m': pd.read_csv('sample_data/nifty_spot_15m.csv', parse_dates=['timestamp']),
         '1h': pd.read_csv('sample_data/nifty_spot_1h.csv', parse_dates=['timestamp']),
-    }, {
-        '5m': pd.read_csv('sample_data/nifty_fut_5m.csv', parse_dates=['timestamp']),
-        '15m': pd.read_csv('sample_data/nifty_fut_15m.csv', parse_dates=['timestamp']),
-        '1h': pd.read_csv('sample_data/nifty_fut_1h.csv', parse_dates=['timestamp']),
     }
 
 
@@ -40,20 +36,20 @@ def print_zones(zones, price):
     passed_s, passed_r = count_passed_zones(zones, price)
 
     print(f"\n🔍 LTP: {price}")
-    print(f"✅ Passed Zones: Support={passed_s} | Resistance={passed_r}")
-    print(f"🟢 SUPPORT ZONES:")
+    print(f"Passed Zones: Support={passed_s} | Resistance={passed_r}")
+    print(f"SUPPORT ZONES:")
     for z in support:
         print(f"  - Band: {z['band']}, Score: {z.get('score')}, TF: {z.get('timeframes')}")
 
-    print(f"\n🔴 RESISTANCE ZONES:")
+    print(f"\nRESISTANCE ZONES:")
     for z in resistance:
         print(f"  - Band: {z['band']}, Score: {z.get('score')}, TF: {z.get('timeframes')}")
 
-    print(f"\n📊 VOLUME PROFILE ZONES:")
+    print(f"\nVOLUME PROFILE ZONES:")
     for z in vp:
         print(f"  - Band: {z['band']}, TF: {z.get('timeframes')}")
 
-    print(f"\n🔵 VWAP ZONES:")
+    print(f"\VWAP ZONES:")
     for z in vwap:
         print(f"  - Band: {z['band']}, TF: {z.get('timeframes')}")
 
@@ -65,21 +61,18 @@ def print_zones(zones, price):
 
 
 def main():
-    spot_dict, fut_dict = load_csv_data()
+    spot_dict = load_csv_data()
     all_timestamps = spot_dict['5m']['timestamp']
 
     for ts in all_timestamps:
         spot_sliced = {
             tf: df[df['timestamp'] <= ts] for tf, df in spot_dict.items()
         }
-        fut_sliced = {
-            tf: df[df['timestamp'] <= ts] for tf, df in fut_dict.items()
-        }
 
         if any(len(df) < 20 for df in spot_sliced.values()):
             continue  # skip early timestamps without enough data
 
-        zones = build_zones_multi_tf(spot_sliced, fut_sliced)
+        zones = build_zones_multi_tf(spot_sliced)
         ltp = spot_sliced['5m'].iloc[-1]['close']
 
         print(f"\n===== {ts} | LTP: {ltp} =====")

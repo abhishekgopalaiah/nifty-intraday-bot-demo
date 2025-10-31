@@ -10,6 +10,8 @@ It runs every 5 minutes, detects breakout and reversal patterns, and generates s
 
 ---
 
+![support_resistance_zones.png](docs/SR.png)
+
 ## ✅ Architecture
 ![Architecture](docs/high_level_architecture.png)
 

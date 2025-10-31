@@ -6,15 +6,15 @@ with ATR-based dynamic radius and configurable strength filtering.
 """
 
 from sklearn.cluster import DBSCAN
-import numpy as np
 import pandas as pd
 
+
 def cluster_zones(
-    levels: pd.Series,
-    atr_series: pd.Series = None,
-    atr_multiplier: float = 1.0,
-    min_samples: int = 2,
-    require_strong: bool = False
+        levels: pd.Series,
+        atr_series: pd.Series = None,
+        atr_multiplier: float = 1.0,
+        min_samples: int = 2,
+        require_strong: bool = False
 ):
     """
     Cluster price levels into S/R zones using DBSCAN, with ATR-based dynamic radius.
@@ -102,7 +102,6 @@ def cluster_zones(
         })
 
     return zones
-
 
 # Example usage:
 # atr = df['atr']  # Precomputed ATR series

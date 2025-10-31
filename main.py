@@ -200,14 +200,6 @@ def run_bot():
                                   option_type=signal["option_type"], quantity=quantity, sl_price=sl,
                                   target_price=target)
         logger.info("[DRY RUN] Trade not executed.")
-        with open("dryrun_trades.csv", "a", newline="") as f:
-            import csv
-            writer = csv.writer(f)
-            writer.writerow([
-                datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S"),
-                signal.get("option_type"), option_symbol, option_ltp,
-                quantity, sl, target, confidence, strike
-            ])
 
     used_signals[signal["option_type"]] = True
     signal_state["used_signals"] = used_signals
