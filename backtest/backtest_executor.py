@@ -28,7 +28,6 @@ def load_csv_multi_tf(base_path: str, symbol: str) -> dict:
 
 def run_backtest(base_path: str) -> pd.DataFrame:
     spot_dict = load_csv_multi_tf(base_path, "nifty_spot")
-    fut_dict = load_csv_multi_tf(base_path, "nifty_fut")
 
     spot_dict['5m'] = enrich_with_indicators(spot_dict['5m'])
     index_df = spot_dict['5m']
@@ -58,13 +57,8 @@ def run_backtest(base_path: str) -> pd.DataFrame:
                 '15m': spot_dict['15m'][spot_dict['15m']['timestamp'] <= timestamp],
                 '1h': spot_dict['1h'][spot_dict['1h']['timestamp'] <= timestamp]
             }
-            fut_data = {
-                '5m': fut_dict['5m'][fut_dict['5m']['timestamp'] <= timestamp],
-                '15m': fut_dict['15m'][fut_dict['15m']['timestamp'] <= timestamp],
-                '1h': fut_dict['1h'][fut_dict['1h']['timestamp'] <= timestamp]
-            }
 
-            zones = build_zones_multi_tf(spot_data, fut_data)
+            zones = build_zones_multi_tf(spot_data)
             logger.info(f"-----------------------zones: {zones} ----------------------")
             if not zones:
                 continue
